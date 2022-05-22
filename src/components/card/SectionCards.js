@@ -12,7 +12,7 @@ function SectionCards(props) {
         className={[styles.cardWrapper, shouldWrap && styles.wrap].join(' ')}
       >
         {videos.map((el, i) => {
-          return <Card imgUrl={el.imgUrl} size={size} id={i} key={i} />;
+          return <Card imgUrl={el.imgUrl} size={size} id={i} key={el.id} />;
         })}
       </div>
     </section>
