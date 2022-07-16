@@ -23,7 +23,7 @@ export default function Home(props) {
       </Head>
 
       <main className={styles.main}>
-        <NavBar username="ankita@ank.com" />
+        <NavBar />
         <Banner
           videoId="4zH5iYM4wJo"
           title="Clifford the red dog"

@@ -31,10 +31,20 @@ const getVideos = async (URL) => {
         title: el.snippet.title,
         imgUrl: el.snippet.thumbnails.high.url,
         id: id,
+        description: el.snippet.description,
+        publishTime: el.snippet.publishedAt,
+        channelTitle: el.snippet.channelTitle,
+        statistics: el.statistics ? el.statistics : { viewCount: 0 },
       };
     });
   } catch (err) {
     console.error('Something went wrong with video library', err);
     return [];
   }
+};
+
+export const getYoutubeVideoById = (videoId) => {
+  const URL = `videos?part=snippet%2CcontentDetails%2Cstatistics&id=${videoId}`;
+
+  return getVideos(URL);
 };
