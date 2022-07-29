@@ -1,5 +1,7 @@
 // import videos from '../data/videos.json';
 
+import { getLikedVideosFromStats, getWatchedVideosFromStats } from './hasura';
+
 export const getCommonVideos = async (searchQuery) => {
   const URL = `search?part=snippet&q=${searchQuery}`;
   return getVideos(URL);
@@ -47,4 +49,30 @@ export const getYoutubeVideoById = (videoId) => {
   const URL = `videos?part=snippet%2CcontentDetails%2Cstatistics&id=${videoId}`;
 
   return getVideos(URL);
+};
+
+export const getWatchItAgainVideos = async (token, userId) => {
+  const videos = await getWatchedVideosFromStats(token, userId);
+
+  return (
+    videos?.map((video) => {
+      return {
+        id: video.videoId,
+        imgUrl: `https://i.ytimg.com/vi/${video.videoId}/maxresdefault.jpg`,
+      };
+    }) || []
+  );
+};
+
+export const getMyListVideos = async (token, userId) => {
+  const videos = await getLikedVideosFromStats(token, userId);
+
+  return (
+    videos?.map((video) => {
+      return {
+        id: video.videoId,
+        imgUrl: `https://i.ytimg.com/vi/${video.videoId}/maxresdefault.jpg`,
+      };
+    }) || []
+  );
 };

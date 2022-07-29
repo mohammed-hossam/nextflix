@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Like from '../../components/icons/like-icon';
 import DisLike from '../../components/icons/dislike-icon';
 import Navbar from '../../components/navbar/Navbar';
@@ -22,14 +22,57 @@ function Video({ video }) {
     statistics: { viewCount } = { viewCount: 0 },
   } = video;
 
-  function handleToggleLike() {
-    setToggleLike(true);
-    setToggleDisLike(false);
+  useEffect(() => {
+    async function getVideoStats() {
+      const res = await fetch(`/api/stats?videoId=${videoId}`);
+      const data = await res.json();
+      console.log(data);
+      if (data.length > 0) {
+        const favourited = data[0].favourited;
+        if (favourited === 1) {
+          setToggleLike(true);
+        } else if (favourited === 0) {
+          setToggleDisLike(true);
+        }
+      }
+    }
+    getVideoStats();
+  }, [videoId]);
+
+  async function runRatingService(favourited) {
+    return await fetch('/api/stats', {
+      method: 'POST',
+      body: JSON.stringify({
+        videoId,
+        favourited,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
   }
 
-  function handleToggleDislike() {
-    setToggleLike(false);
-    setToggleDisLike(true);
+  async function handleToggleLike() {
+    console.log('welcome from toggle like');
+
+    //23ml check lw 2sln el like button mtdas 3leh
+    if (!toggleLike) {
+      setToggleLike(true);
+      setToggleDisLike(false);
+      const res = await runRatingService(1);
+      console.log(await res.json());
+    }
+  }
+
+  async function handleToggleDislike() {
+    //23ml check lw 2sln el dilike button mtdas 3leh
+    console.log('welcome from toggle dislike');
+    if (!toggleDisLike) {
+      setToggleLike(false);
+      setToggleDisLike(true);
+      const res = await runRatingService(0);
+      console.log(await res.json());
+    }
   }
 
   return (

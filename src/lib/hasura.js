@@ -92,7 +92,7 @@ export async function findVideoIdByUser(token, userId, videoId) {
 
   console.log(response);
 
-  return response?.data?.stats?.length === 0;
+  return response?.data?.stats;
 }
 
 export async function insertVideoStats(
@@ -115,7 +115,7 @@ export async function insertVideoStats(
 
   const response = await queryHasuraGQL(
     operationsDoc,
-    'createNewStats',
+    'insertStats',
     { favourited, userId, watched, videoId },
     token
   );
@@ -151,4 +151,52 @@ mutation updateStats($favourited: Int!, $userId: String!, $watched: Boolean!, $v
     { favourited, userId, watched, videoId },
     token
   );
+}
+
+export async function getWatchedVideosFromStats(token, userId) {
+  const operationsDoc = `
+  query watchedVideos($userId: String!) {
+    stats(where: {
+      watched: {_eq: true}, 
+      userId: {_eq: $userId},
+    }) {
+      videoId
+    }
+  }
+`;
+
+  const response = await queryHasuraGQL(
+    operationsDoc,
+    'watchedVideos',
+    {
+      userId,
+    },
+    token
+  );
+
+  return response?.data?.stats;
+}
+
+export async function getLikedVideosFromStats(token, userId) {
+  const operationsDoc = `
+  query LikedVideos($userId: String!) {
+    stats(where: {
+      favourited: {_eq: 1}, 
+      userId: {_eq: $userId},
+    }) {
+      videoId
+    }
+  }
+`;
+
+  const response = await queryHasuraGQL(
+    operationsDoc,
+    'LikedVideos',
+    {
+      userId,
+    },
+    token
+  );
+
+  return response?.data?.stats;
 }

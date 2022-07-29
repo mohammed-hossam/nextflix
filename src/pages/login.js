@@ -20,18 +20,29 @@ function Login() {
     //el fkra hena lma bn3ml router.push('./') bya5od wa2t shwia w moomkn tro7 3lamt el loading(lw 7att setIsLoading(false) direct b3d ma el token yrg3) b3d ma ykon 5alas el token rg3 w bd2 y3ml redirect, la2n 3mlyt el redirect bta5od wa2t seka, fafdl ene 27ot loading b false lma 2t2kd eno el redirect 5alas 5els
     const handleComplete = () => {
       setIsLoading(false);
+      setUserMsg('');
     };
     const handleStart = () => {
       setUserMsg('redirecting');
     };
+    const handleRouteChangeError = (err) => {
+      if (err.cancelled) {
+        console.log(`Route to ${url} was cancelled!`);
+        setUserMsg(`Route to ${url} was cancelled!`);
+        setIsLoading(false);
+      } else {
+        setIsLoading(false);
+        setUserMsg('');
+      }
+    };
     router.events.on('routeChangeStart', handleStart);
     router.events.on('routeChangeComplete', handleComplete);
-    router.events.on('routeChangeError', handleComplete);
+    router.events.on('routeChangeError', handleRouteChangeError);
 
     return () => {
       router.events.off('routeChangeStart', handleStart);
       router.events.off('routeChangeComplete', handleComplete);
-      router.events.off('routeChangeError', handleComplete);
+      router.events.off('routeChangeError', handleRouteChangeError);
     };
   }, [router]);
 
