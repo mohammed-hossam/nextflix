@@ -62,7 +62,10 @@ function Navbar() {
         },
       });
 
-      console.log(response);
+      console.log('redirected', response.redirected);
+      if (response && response.redirected) {
+        router.push('/login');
+      }
     } catch (err) {
       console.error('Error logging out', err);
       // router.push('./login');

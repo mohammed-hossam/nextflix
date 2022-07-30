@@ -36,7 +36,7 @@ export async function middleware(req) {
     return NextResponse.next();
   }
 
-  //if token not valid or not oken at all, then redirect to login page
+  //if token not valid or no token at all, then redirect to login page
   if ((!token || !userId) && pathname !== '/login') {
     const url = req.nextUrl.clone();
     url.pathname = '/login';

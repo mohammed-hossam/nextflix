@@ -21,14 +21,15 @@ function Login() {
     const handleComplete = () => {
       setIsLoading(false);
       setUserMsg('');
+      console.log(`Route to url was Completed!`);
     };
     const handleStart = () => {
       setUserMsg('redirecting');
     };
     const handleRouteChangeError = (err) => {
       if (err.cancelled) {
-        console.log(`Route to ${url} was cancelled!`);
-        setUserMsg(`Route to ${url} was cancelled!`);
+        console.log(`Route to url was cancelled!`);
+        setUserMsg(`Route to url was cancelled!`);
         setIsLoading(false);
       } else {
         setIsLoading(false);

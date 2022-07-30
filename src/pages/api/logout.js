@@ -26,10 +26,10 @@ export default async function login(req, res) {
       }
 
       //redirects user to login page
-      return res.redirect(302, '/login');
-      // res.writeHead(302, { Location: '/login' });
-      // res.end();
-      // return;
+      // return res.redirect(302, '/login');
+      res.writeHead(302, { Location: '/login' });
+      res.end();
+      return;
     }
   } catch (error) {
     console.error({ error });
