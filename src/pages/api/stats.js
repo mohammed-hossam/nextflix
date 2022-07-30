@@ -1,15 +1,15 @@
-import { JsonWebTokenError } from 'jsonwebtoken';
 import { verifyToken } from '../../lib/utils';
 import {
   findVideoIdByUser,
   insertVideoStats,
   updateVideoStats,
 } from '../../lib/hasura';
+
 export default async function stats(req, res) {
   const token = req.cookies.token;
   try {
     if (!token) {
-      res.status(403).send({});
+      return res.status(403).send({});
     } else {
       let inputParams;
       if (req.method === 'POST') {
@@ -33,7 +33,7 @@ export default async function stats(req, res) {
               videoId,
               favourited,
             });
-            res.send({ data: response });
+            return res.send({ data: response });
           } else {
             // update
             const response = await updateVideoStats(token, {
@@ -42,23 +42,25 @@ export default async function stats(req, res) {
               videoId,
               favourited,
             });
-            res.send({ data: response });
+            return res.send({ data: response });
           }
         }
         //handle GET request
         else if (req.method === 'GET') {
           if (!VideoStatsnotFound) {
-            res.send(videoStats);
+            return res.send(videoStats);
           } else {
             // res.status(404);
-            res.send({
+            return res.send({
               user: null,
               msg: '404 Video not found in the stats hasura database',
             });
           }
         }
       } else {
-        res.status(500).send({ done: false, msg: 'videoId is Required' });
+        return res
+          .status(500)
+          .send({ done: false, msg: 'videoId is Required' });
       }
     }
     res.send({ done: true });

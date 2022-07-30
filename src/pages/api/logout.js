@@ -20,17 +20,19 @@ export default async function login(req, res) {
       } catch (error) {
         console.log("User's session with Magic already expired");
         console.error('Error occurred while logging out magic user', error);
-        res
+        return res
           .status(400)
           .json({ message: 'Error occurred while logging out magic user' });
       }
 
       //redirects user to login page
+      // res.redirect(302, '/login');
       res.writeHead(302, { Location: '/login' });
       res.end();
+      return;
     }
   } catch (error) {
     console.error({ error });
-    res.status(401).json({ message: 'User is not logged in' });
+    return res.status(401).json({ message: 'User is not logged in' });
   }
 }
