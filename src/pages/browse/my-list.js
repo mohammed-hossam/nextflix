@@ -33,15 +33,15 @@ export async function getServerSideProps(context) {
   const userId = await verifyToken(token);
 
   //this is commented because we use the same logic for all of the pages in the middleware, so w dont need it anymore
-  if (!userId) {
-    //this is from the docs of the getServerSideProps
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    };
-  }
+  // if (!userId) {
+  //   //this is from the docs of the getServerSideProps
+  //   return {
+  //     redirect: {
+  //       destination: '/login',
+  //       permanent: false,
+  //     },
+  //   };
+  // }
   const videos = await getMyListVideos(token, userId);
   console.log({ videos });
   return {
